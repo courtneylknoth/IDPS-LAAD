@@ -1,7 +1,7 @@
 Shiny Analytic Data Product
 ================
 Capt Spencer Butt
-r format(Sys.Date(), '%d %B %Y')
+17 January, 2018
 
 Section 1
 ---------
@@ -27,19 +27,19 @@ Section 2
 
 <table style="width:100%;">
 <colgroup>
-<col width="6%" />
-<col width="7%" />
-<col width="5%" />
-<col width="11%" />
-<col width="9%" />
-<col width="6%" />
-<col width="14%" />
 <col width="23%" />
-<col width="16%" />
+<col width="3%" />
+<col width="4%" />
+<col width="22%" />
+<col width="11%" />
+<col width="8%" />
+<col width="7%" />
+<col width="10%" />
+<col width="7%" />
 </colgroup>
 <thead>
 <tr class="header">
-<th align="left">Feature</th>
+<th align="left">Analytic Feature</th>
 <th align="right">Priority</th>
 <th align="left">Status</th>
 <th align="left">Value to User</th>
@@ -52,118 +52,202 @@ Section 2
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">Read in .csv</td>
-<td align="right">5</td>
-<td align="left">Not Started</td>
-<td align="left">Allows user to specify what IDPS log file to analyze for anomalies indicating potential hostile cyber traffic</td>
-<td align="left">File selection</td>
-<td align="left">None</td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-</tr>
-<tr class="even">
-<td align="left">Select Features</td>
-<td align="right">6</td>
-<td align="left">Not Started</td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-</tr>
-<tr class="odd">
-<td align="left">Format Data for ANN</td>
+<td align="left">Import IDPS Cyber Log File</td>
 <td align="right">7</td>
 <td align="left">Not Started</td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
+<td align="left">GUI based file import</td>
+<td align="left">.csv IDPS Log</td>
+<td align="left">data frame</td>
+<td align="left">Information to User</td>
+<td align="left">No</td>
+<td align="left">No</td>
 </tr>
 <tr class="even">
-<td align="left">Build Designed Experiment</td>
+<td align="left">User feature Selector</td>
 <td align="right">8</td>
 <td align="left">Not Started</td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
+<td align="left">GUI based data preparation</td>
+<td align="left">GUI Input Selection</td>
+<td align="left">data frame</td>
+<td align="left">Information to User</td>
+<td align="left">No</td>
+<td align="left">No</td>
 </tr>
 <tr class="odd">
-<td align="left">Evaluate ANNs</td>
+<td align="left">Adjust Data Frame for Missing Categorical Observations</td>
+<td align="right">9</td>
+<td align="left">Not Started</td>
+<td align="left">automatically format data for ANN analysis</td>
+<td align="left">None</td>
+<td align="left">data frame</td>
+<td align="left">Internal to Analytic</td>
+<td align="left">No</td>
+<td align="left">No</td>
+</tr>
+<tr class="even">
+<td align="left">Adjust Data Frame for Missing Port Number Observations</td>
+<td align="right">10</td>
+<td align="left">Not Started</td>
+<td align="left">automatically format data for ANN analysis</td>
+<td align="left">None</td>
+<td align="left">data frame</td>
+<td align="left">Internal to Analytic</td>
+<td align="left">No</td>
+<td align="left">No</td>
+</tr>
+<tr class="odd">
+<td align="left">Adjust Data Frame for Missing IP Address Observations</td>
+<td align="right">11</td>
+<td align="left">Not Started</td>
+<td align="left">automatically format data for ANN analysis</td>
+<td align="left">None</td>
+<td align="left">data frame</td>
+<td align="left">Internal to Analytic</td>
+<td align="left">No</td>
+<td align="left">No</td>
+</tr>
+<tr class="even">
+<td align="left">Adjust Data Frame for Missing Continuous Observations</td>
+<td align="right">12</td>
+<td align="left">Not Started</td>
+<td align="left">automatically format data for ANN analysis</td>
+<td align="left">None</td>
+<td align="left">data frame</td>
+<td align="left">Internal to Analytic</td>
+<td align="left">No</td>
+<td align="left">No</td>
+</tr>
+<tr class="odd">
+<td align="left">One-Hot Encode Categorical Features</td>
+<td align="right">13</td>
+<td align="left">Not Started</td>
+<td align="left">automatically format data for ANN analysis</td>
+<td align="left">None</td>
+<td align="left">data frame</td>
+<td align="left">Internal to Analytic</td>
+<td align="left">No</td>
+<td align="left">No</td>
+</tr>
+<tr class="even">
+<td align="left">Convert IP Addresses to 32 Binary Columns</td>
+<td align="right">14</td>
+<td align="left">Not Started</td>
+<td align="left">automatically format data for ANN analysis</td>
+<td align="left">None</td>
+<td align="left">data frame</td>
+<td align="left">Internal to Analytic</td>
+<td align="left">No</td>
+<td align="left">No</td>
+</tr>
+<tr class="odd">
+<td align="left">Convert Port Number to 16 Binary Columns</td>
+<td align="right">15</td>
+<td align="left">Not Started</td>
+<td align="left">automatically format data for ANN analysis</td>
+<td align="left">None</td>
+<td align="left">data frame</td>
+<td align="left">Internal to Analytic</td>
+<td align="left">No</td>
+<td align="left">No</td>
+</tr>
+<tr class="even">
+<td align="left">Scale each column of the data frame</td>
+<td align="right">16</td>
+<td align="left">Not Started</td>
+<td align="left">automatically format data for ANN analysis</td>
+<td align="left">None</td>
+<td align="left">data frame</td>
+<td align="left">Internal to Analytic</td>
+<td align="left">No</td>
+<td align="left">No</td>
+</tr>
+<tr class="odd">
+<td align="left">Split data frame into train and test subsets</td>
+<td align="right">17</td>
+<td align="left">Not Started</td>
+<td align="left">automatically format data for ANN analysis</td>
+<td align="left">None</td>
+<td align="left">data frame</td>
+<td align="left">Internal to Analytic</td>
+<td align="left">No</td>
+<td align="left">No</td>
+</tr>
+<tr class="even">
+<td align="left">Query User for Custom or Default Hyperparameter Designed Experiment</td>
+<td align="right">18</td>
+<td align="left">Not Started</td>
+<td align="left">GUI based method to select novice/expert modes of operation</td>
+<td align="left">GUI Input Selection</td>
+<td align="left">None</td>
+<td align="left">Internal to Analytic</td>
+<td align="left">No</td>
+<td align="left">No</td>
+</tr>
+<tr class="odd">
+<td align="left">Build Default or Import Custom Experimental Design</td>
 <td align="right">1</td>
 <td align="left">Not Started</td>
-<td align="left">Enable testing of multiple hyperparameter settings for ANNs to determine optimal settings</td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
+<td align="left">GUI based method to select novice/expert modes of operation</td>
+<td align="left">.csv Designed Experiment or None</td>
+<td align="left">DOE data frame</td>
+<td align="left">Internal to Analytic</td>
+<td align="left">Yes</td>
+<td align="left">Yes (Default Only)</td>
 </tr>
 <tr class="even">
-<td align="left">Train Final ANN</td>
+<td align="left">Run Designed Experiment</td>
 <td align="right">2</td>
 <td align="left">Not Started</td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
+<td align="left">Identify best ANN hyperparameter settings</td>
+<td align="left">GUI Execute Button</td>
+<td align="left">Status Bar</td>
+<td align="left">Information to User</td>
+<td align="left">Yes</td>
+<td align="left">Yes</td>
 </tr>
 <tr class="odd">
-<td align="left">Display Anomalous</td>
+<td align="left">Present Designed Experiment Results</td>
 <td align="right">3</td>
 <td align="left">Not Started</td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
+<td align="left">Display Hyperparameter experimental design results</td>
+<td align="left">None</td>
+<td align="left">Test Design Results</td>
+<td align="left">Information to User</td>
+<td align="left">Yes</td>
+<td align="left">Yes</td>
 </tr>
 <tr class="even">
-<td align="left">Display top 'n' Anomalous</td>
+<td align="left">Construct ANN using Best Hyperparameters Found In Designed Experiment</td>
 <td align="right">4</td>
 <td align="left">Not Started</td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
+<td align="left">ANN trained to detect anomalies</td>
+<td align="left">GUI Execute Button</td>
+<td align="left">Status Bar</td>
+<td align="left">Information to User</td>
+<td align="left">Yes</td>
+<td align="left">Yes</td>
+</tr>
+<tr class="odd">
+<td align="left">Use ANN to Detect Anomalies</td>
+<td align="right">5</td>
+<td align="left">Not Started</td>
+<td align="left">Anomaly Detection</td>
+<td align="left">GUI Execute Button</td>
+<td align="left">Histogram of Anomalies</td>
+<td align="left">Identify Anomalies</td>
+<td align="left">Yes</td>
+<td align="left">Yes</td>
+</tr>
+<tr class="even">
+<td align="left">Display Top 'n' Anomalies</td>
+<td align="right">6</td>
+<td align="left">Not Started</td>
+<td align="left">List of most likely anomales to evaluate for hostile cyber action</td>
+<td align="left">Number (n) anomalies to display</td>
+<td align="left">List/Table</td>
+<td align="left">Identify Anomalies</td>
+<td align="left">Yes</td>
+<td align="left">Yes</td>
 </tr>
 </tbody>
 </table>
-
-IDPS-LAAD will perform the following functions:
-
-1.  Read in a .csv file composed of individual IDPS cyber log observations described by features
-
-2.  Allow the user to select which features the user wants to retain for analysis
-
-3.  Automatically convert the selected features into a format compatible with Autoencoder Neural Networks
-    1.  Adjust for missing data
-        1.  Add a missing column for Port Numbers and IP Addresses with a value of '1' where that data is missing
-        2.  Missing categorical data will be flagged with a 'missing' label
-
-    2.  One-Hot Encode Categorical Features
-    3.  Convert IP Addresses into 32-bit binary number, each column containing one bit
-    4.  Scale the data frame
-    5.  Split the data frame into training and test data frames
-
-4.  Construct a designed experiment to test ANN hyperparameters
-
-5.  Evaluate the ANNs using the hyperparameters in 4.
-
-6.  Automatically select the optimal hyperparameters and build an ANN using those hyperparameters
-
-7.  Graphically display via histogram anomalous observations using the ANN built in 6.
-
-8.  Output a user specified top 'n' anomalous observations

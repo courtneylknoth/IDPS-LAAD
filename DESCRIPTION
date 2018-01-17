@@ -1,12 +1,19 @@
 Package: IDPS-LAAD
 Type: Package
-Title: What the Package Does in One 'Title Case' Line
+Title: Intrusion Detection Prevention System Log Autoencoder Anomaly Detector
 Version: 1.0
 Date: 2018-01-17
-Author: Your Name
-Maintainer: Your Name <your@email.com>
-Description: One paragraph description of what the package does as one or more full
-          sentences.
+Author: Spencer Butt
+Maintainer: Spencer Butt <spencer.a.butt@gmail.com>
+Description: IDPS-LAAD is designed to read in a .csv containing the IDPS cyber 
+  log. The program will allow users to select what features (variables) in the 
+  data they wish to analyze. The program will then automatically prepare the 
+  data for ANN analysis. Once the data is prepared for ANN analysis, the 
+  IDPS-LAAD will automatically generate a designed experiment to test ANN 
+  hyperparameters, and subsequently run ANNs testing each of the 
+  hyperparameters. Once the 'optimal' hyperparameters are found the the analytic 
+  will analyze the IDPS cyber data and graphically display the results as well 
+  as output a user defined top 'n' anomalous observations.
 License: GPL (>= 2)
 Imports: Rcpp (>= 0.12.12)
 LinkingTo: Rcpp

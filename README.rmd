@@ -1,7 +1,7 @@
 ---
 title: "Shiny Analytic Data Product"
 author: "Capt Spencer Butt"
-date: " r format(Sys.Date(), '%d %B %Y') "
+date: "`r format(Sys.time(), '%d %B, %Y')`"
 output: github_document
 keep_md: yes
 ---
@@ -29,42 +29,53 @@ IDPS-LAAD is designed to read in a .csv containing the IDPS cyber log. The progr
 
 ## Section 2
 
-| Feature | Priority | Status | Value to User | User Inputs | Outputs | Purpose of Output | Sufficient Time to Deadline? | Required in Version? |
-| :------ | -------: | :----- | :------------ | :---------- | :------ | :---------------- | :--------------------------- | :------------------- |
-| Read in .csv |  5 | Not Started  | Allows user to specify what IDPS log file to analyze for anomalies indicating potential hostile cyber traffic  | File selection  | None  |   |   |   |
-| Select Features | 6 | Not Started |  |  |  |  |  |  |
-| Format Data for ANN | 7 | Not Started |  |  |  |  |  |  |
-| Build Designed Experiment | 8 | Not Started |  |  |  |  |  |  |
-| Evaluate ANNs | 1 | Not Started | Enable testing of multiple hyperparameter settings for ANNs to determine optimal settings |  |  |  |  |  |
-| Train Final ANN | 2 | Not Started |  |  |  |  |  |  |
-| Display Anomalous | 3 | Not Started |  |  |  |  |  |  |
-| Display top 'n' Anomalous | 4 | Not Started |  |  |  |  |  |  |
+| Analytic Feature                                                      | Priority | Status      | Value to User                                                     | User Inputs                      | Outputs                | Purpose of Output    | Sufficient Time to Deadline? | Required in Version? |  
+|:----------------------------------------------------------------------|---------:|:------------|:------------------------------------------------------------------|:---------------------------------|:-----------------------|:---------------------|:-----------------------------|:---------------------| 
+| Import IDPS Cyber Log File                                            | 7        | Not Started | GUI based file import                                             | .csv IDPS Log                    | data frame             | Information to User  | No                           | No                   | 
+| User feature Selector                                                 | 8        | Not Started | GUI based data preparation                                        | GUI Input Selection              | data frame             | Information to User  | No                           | No                   | 
+| Adjust Data Frame for Missing Categorical Observations                | 9        | Not Started | automatically format data for ANN analysis                        | None                             | data frame             | Internal to Analytic | No                           | No                   | 
+| Adjust Data Frame for Missing Port Number Observations                | 10       | Not Started | automatically format data for ANN analysis                        | None                             | data frame             | Internal to Analytic | No                           | No                   | 
+| Adjust Data Frame  for Missing IP Address Observations                | 11       | Not Started | automatically format data for ANN analysis                        | None                             | data frame             | Internal to Analytic | No                           | No                   | 
+| Adjust Data Frame  for Missing Continuous Observations                | 12       | Not Started | automatically format data for ANN analysis                        | None                             | data frame             | Internal to Analytic | No                           | No                   | 
+| One-Hot Encode Categorical Features                                   | 13       | Not Started | automatically format data for ANN analysis                        | None                             | data frame             | Internal to Analytic | No                           | No                   | 
+| Convert IP Addresses to 32 Binary Columns                             | 14       | Not Started | automatically format data for ANN analysis                        | None                             | data frame             | Internal to Analytic | No                           | No                   | 
+| Convert Port Number to 16 Binary Columns                              | 15       | Not Started | automatically format data for ANN analysis                        | None                             | data frame             | Internal to Analytic | No                           | No                   | 
+| Scale each column of the data frame                                   | 16       | Not Started | automatically format data for ANN analysis                        | None                             | data frame             | Internal to Analytic | No                           | No                   | 
+| Split data frame into train and test subsets                          | 17       | Not Started | automatically format data for ANN analysis                        | None                             | data frame             | Internal to Analytic | No                           | No                   | 
+| Query User for Custom or Default Hyperparameter Designed Experiment   | 18       | Not Started | GUI based method to select novice/expert modes of operation       | GUI Input Selection              | None                   | Internal to Analytic | No                           | No                   | 
+| Build Default or Import Custom Experimental Design                    | 1        | Not Started | GUI based method to select novice/expert modes of operation       | .csv Designed Experiment or None | DOE data frame         | Internal to Analytic | Yes                          | Yes (Default Only)   | 
+| Run Designed Experiment                                               | 2        | Not Started | Identify best ANN hyperparameter settings                         | GUI Execute Button               | Status Bar             | Information to User  | Yes                          | Yes                  | 
+| Present Designed Experiment Results                                   | 3        | Not Started | Display Hyperparameter experimental design results                | None                             | Test Design Results    | Information to User  | Yes                          | Yes                  | 
+| Construct ANN using Best Hyperparameters Found In Designed Experiment | 4        | Not Started | ANN trained to detect anomalies                                   | GUI Execute Button               | Status Bar             | Information to User  | Yes                          | Yes                  | 
+| Use ANN to Detect Anomalies                                           | 5        | Not Started | Anomaly Detection                                                 | GUI Execute Button               | Histogram of Anomalies | Identify Anomalies   | Yes                          | Yes                  | 
+| Display Top 'n' Anomalies                                             | 6        | Not Started | List of most likely anomales to evaluate for hostile cyber action | Number (n) anomalies to display  | List/Table             | Identify Anomalies   | Yes                          | Yes                  | 
 
 
 
-IDPS-LAAD will perform the following functions:
-
-1. Read in a .csv file composed of individual IDPS cyber log observations described by features
-
-2. Allow the user to select which features the user wants to retain for analysis
-
-3. Automatically convert the selected features into a format compatible with Autoencoder Neural Networks
-    i) Adjust for missing data
-        A.  Add a missing column for Port Numbers and IP Addresses with a value of '1' where that data is missing
-        B.  Missing categorical data will be flagged with a 'missing' label
-    ii) One-Hot Encode Categorical Features
-    iii) Convert IP Addresses into 32-bit binary number, each column containing one bit
-    iiii) Scale the data frame
-    iiiii) Split the data frame into training and test data frames
-
-4. Construct a designed experiment to test ANN hyperparameters
-
-5. Evaluate the ANNs using the hyperparameters in 4.
-
-6. Automatically select the optimal hyperparameters and build an ANN using those hyperparameters
-
-7. Graphically display via histogram anomalous observations using the ANN built in 6. 
-
-8. Output a user specified top 'n' anomalous observations
-
+```{r informational, include = FALSE}
+# IDPS-LAAD will perform the following functions:
+# 
+# 1. Read in a .csv file composed of individual IDPS cyber log observations described by features
+# 
+# 2. Allow the user to select which features the user wants to retain for analysis
+# 
+# 3. Automatically convert the selected features into a format compatible with Autoencoder Neural Networks
+#     i) Adjust for missing data
+#         A.  Add a missing column for Port Numbers and IP Addresses with a value of '1' where that data is missing
+#         B.  Missing categorical data will be flagged with a 'missing' label
+#     ii) One-Hot Encode Categorical Features
+#     iii) Convert IP Addresses into 32-bit binary number, each column containing one bit
+#     iiii) Scale the data frame
+#     iiiii) Split the data frame into training and test data frames
+# 
+# 4. Construct a designed experiment to test ANN hyperparameters
+# 
+# 5. Evaluate the ANNs using the hyperparameters in 4.
+# 
+# 6. Automatically select the optimal hyperparameters and build an ANN using those hyperparameters
+# 
+# 7. Graphically display via histogram anomalous observations using the ANN built in 6. 
+# 
+# 8. Output a user specified top 'n' anomalous observations
+```
 
