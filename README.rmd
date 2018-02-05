@@ -10,7 +10,7 @@ keep_md: yes
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Section 1
+[![Build Status](https://travis-ci.org/hadley/devtools.svg?branch=master)](https://travis-ci.org/SpencerButt/IDPS-LAAD)
 
 ### 1.1 Name
 IDPS Log Autoencoder Anomaly Detector (IDPS-LAAD)
