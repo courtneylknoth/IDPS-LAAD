@@ -1,4 +1,4 @@
-Package: IDPS-LAAD
+Package: IDPS.LAAD
 Type: Package
 Title: Intrusion Detection Prevention System Log Autoencoder Anomaly Detector
 Version: 1.0
@@ -17,3 +17,5 @@ Description: IDPS-LAAD is designed to read in a .csv containing the IDPS cyber
 License: GPL (>= 2)
 Imports: Rcpp (>= 0.12.12)
 LinkingTo: Rcpp
+RoxygenNote: 6.0.1
+Suggests: testthat
