@@ -1,10 +1,9 @@
 Shiny Analytic Data Product
 ================
 Capt Spencer Butt
-17 January, 2018
+05 February, 2018
 
-Section 1
----------
+[![Build Status](https://travis-ci.org/SpencerButt/IDPS-LAAD.svg?branch=master)](https://travis-ci.org/SpencerButt/IDPS-LAAD)
 
 ### 1.1 Name
 
