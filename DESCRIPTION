@@ -20,6 +20,7 @@ Imports: Rcpp (>= 0.12.12),
          shinythemes
          tidyverse
          h2o
+SystemRequirements: Java (>= 1.7)
 LinkingTo: Rcpp
 RoxygenNote: 6.0.1
 Suggests: testthat
