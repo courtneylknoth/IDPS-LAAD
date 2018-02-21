@@ -15,4 +15,5 @@ server <- function(input, output, session) {
     map_data[order(map_data[input$select]), ]
     
   })
+  
 }

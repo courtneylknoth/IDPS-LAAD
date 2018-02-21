@@ -1,0 +1,24 @@
+---
+title: "Intro and Instructions"
+author: "Capt Spencer Butt"
+date: "February 20, 2018"
+
+---
+
+## Introduction
+
+This shiny gadget is designed to construct an Autoencoder Neural Network (ANN) to detect anomalous data observations within a dataset. This analytic will test multiple ANN hyperparameters to determine the optimal settings supporting anomaly detection.
+
+## Current Limitations
+
+* Data Preperation
+  + 
+  + 
+
+* Hyperparameter DOE
+
+* Test Hyperparameters
+
+* Plot Outliers
+
+
