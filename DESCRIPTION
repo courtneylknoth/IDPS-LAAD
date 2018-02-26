@@ -16,9 +16,10 @@ Description: IDPS-LAAD is designed to read in a .csv containing the IDPS cyber
   as output a user defined top 'n' anomalous observations.
 License: GPL (>= 2)
 Imports: Rcpp (>= 0.12.12),
-         shiny
-         shinythemes
-         tidyverse
+         shiny,
+         shinythemes,
+         tidyverse,
+         caret,
          h2o
 SystemRequirements: Java (>= 1.7)
 LinkingTo: Rcpp
