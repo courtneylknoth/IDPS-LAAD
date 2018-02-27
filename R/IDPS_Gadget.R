@@ -1,7 +1,6 @@
 #' @title Interactive anomaly detection using autoencoder neural network
 #' 
 #' @import shiny
-#' @import shinyjs
 #' @import tidyverse
 #' @import caret
 #' @import h2o
