@@ -144,8 +144,11 @@ IDPS_Gadget <- function(...){
                                                    selected = 'Run Short Default Experimental Design',
                                                    multiple = FALSE),
                                        textOutput('DOENote'),
+                                       titlePanel(''),
                                        actionButton('ActionTestDesign', 
                                                     label = 'Run Autoencoder Designed Experiment'),
+                                       textOutput('ResultsLocation'),
+                                       titlePanel('Selected Hyperparameter Test Design'),
                                        tableOutput('SelectedExperiment')
                                 )
                               )
@@ -158,9 +161,22 @@ IDPS_Gadget <- function(...){
                             fluidPage(
                               navlistPanel('Select to View',
                                            tabPanel('Top Outliers',
-                                                    tableOutput('TopOutliers')),
+                                                    fluidPage(
+                                                      fluidRow(
+                                                        column(width = 12,
+                                                               tableOutput('TopOutliers')
+                                                        )
+                                                      )
+                                                    )
+                                           ),
                                            tabPanel('Outlier Score Histogram',
-                                                    tableOutput('Histogram'))
+                                                    fluidPage(
+                                                      fluidRow(
+                                                        column(width = 12,
+                                                               plotOutput('OFSHist')
+                                                        )
+                                                      )
+                                                    ))
                                            
                               )
                             )
@@ -179,12 +195,15 @@ IDPS_Gadget <- function(...){
     # Load Tables and one hot encode using caret ----
     output$OneData <- renderText('Functionality currently limited to use of 
                                  Fisher Iris Data Only')
-    irisdata <- as.tibble(iris)
+    irisdata <- tibble::as.tibble(iris)
     dmy <- caret::dummyVars(' ~ .', data = irisdata)
     irisdataOH <- data.frame(predict(dmy, newdata = irisdata))
-    irisDataFull <- as.tibble(irisdataOH)
+    irisDataFull <- tibble::as.tibble(irisdataOH)
     
-    output$Table <- renderTable(iris)
+    irisWithObsNum <- tibble::as.tibble(iris) %>%
+      dplyr::mutate(Observation_Number = 1:nrow(iris))
+    
+    output$Table <- renderTable(irisWithObsNum)
     
     # Split into Test and Train Subsets ----
     output$Subset1 <- renderText('Limited Functionality, Using Fisher Iris Data')
@@ -281,6 +300,10 @@ IDPS_Gadget <- function(...){
                                  tests all test/training subsets as a 
                                  Neural Network hyperparameter.')
     
+    output$ResultsLocation <- renderText('After button press, results will be dispayed on subsequent tabs. 
+                                         Running the experiment will take time, please view staus in the 
+                                         R Console window.')
+    
     rv <- reactiveValues(testDesign = NULL)
     
     
@@ -302,6 +325,9 @@ IDPS_Gadget <- function(...){
       # Load Autoencoder datasets ----
       path <- './data/'
       h2o::h2o.init()
+      
+      print('Loading all datasets to H2O')
+      
       irisDataFullPM.5 <- h2o.importFile(path = paste0(path, 'irisDataFullPM.5','.csv'),
                                          header = TRUE)
       irisDataFullPM1 <- h2o.importFile(path = paste0(path, 'irisDataFullPM1','.csv'),
@@ -348,10 +374,12 @@ IDPS_Gadget <- function(...){
       # Evaluate Test Designs ----
       testDesignRes <- rv$testDesign %>%
         dplyr::select(-Y) %>%
-        tibble::add_column(Dropout = TRUE, DPt = NA, Train_MSE = NA, Test_MSE = NA, Train_Time = NA,
+        tibble::add_column(Dropout = TRUE, Run_Number = NA, Train_MSE = NA, Test_MSE = NA, Train_Time = NA,
                            Notes = NA)
       
       n = nrow(testDesignRes)
+      
+      print('Running Autoencoder Hyperparameter Designed Experiment')
       
       for (i in 1:n){
         
@@ -375,6 +403,9 @@ IDPS_Gadget <- function(...){
           
           modelName <- paste0('DpT: ', testDesignRes$Design_Point[i], '_Subset: ',
                               testDesignRes$Subset_Split[i])
+          
+          print(paste0('Experimental Design Point ', i, ' of ', n))
+          
           assign(modelName,
                  h2o.deeplearning(model_id = modelName,
                                   x = h2o.names(get(h_training_frame)),
@@ -422,8 +453,7 @@ IDPS_Gadget <- function(...){
           testDesignRes$Train_MSE[i] <- h2o.mse(get(modelName), train = TRUE)
           testDesignRes$Test_MSE[i] <- h2o.mse(get(modelName), valid = TRUE)
           testDesignRes$Train_Time[i] <- get(modelName)@model$run_time/1000
-          testDesignRes$DPt[i] <- i
-          print(i)
+          testDesignRes$Run_Number[i] <- i
         },
         error = function(cond){
           testDesignRes$Notes[i] <- 'Exponential Growth'
@@ -434,7 +464,8 @@ IDPS_Gadget <- function(...){
       
       output$ResultsTable <- renderTable(testDesignRes)
       
-      #Plot MSE Reconstructions and Present top n outliers
+      
+      # Summarise Results By Design Point ----
       by_Dpt <- testDesignRes %>%
         group_by(Design_Point) %>%
         summarise(AvgTestMSE = mean(Test_MSE),
@@ -444,7 +475,98 @@ IDPS_Gadget <- function(...){
                   CountTestMSE = n()) %>%
         mutate(AvgMSERank = rank(AvgTestMSE))
       
+      # Identify best Hyperparameter Settings ----
+      Final <- testDesignRes %>%
+        filter(Design_Point==top_n(by_Dpt, 1, AvgTestMSE)$Design_Point) %>%
+        slice(1)
       
+      # AnomalyDetection Autoencoder ----
+      # Get Hyperparameters
+      
+      print('Running Anomaly Detection Autoencoder with Optimum Hyperparameters')
+      
+      i=1
+      h_x <- paste0(Final$Design_Point[i])
+      h_training_frame <- paste0('irisDataFull', Final$Data_Scale[i])
+      ifelse(Final$Dropout[i]==TRUE, h_activation <- paste0(Final$Activation_Function[i], 'WithDropout'),
+             h_activation <- Final$Activation_Function[i])
+      h_hidden <- Final$Number_Neurons[i]
+      h_adaptive_rate <- TRUE
+      h_rho <- Final$Rho[i]
+      h_epsilon <- Final$Epsilon[i]
+      h_NAG <- TRUE
+      h_input_dropout_rate <- ifelse(Final$Dropout[i]==TRUE, Final$Input_DO_Rate[i], NULL)
+      h_hidden_dropout_rate <- ifelse(Final$Dropout[i]==TRUE, Final$Hidden_DO_Rate[i], NULL)
+      h_initial_weight_dist <- Final$Initial_Weight_Dist[i]
+      h_shuffle_train_data <- Final$Shuffle_Train_Data[i]
+      
+      # Run Best Hyperparameter Autoencoder
+      modelName <- 'anomalyAutoencoder'
+      
+      assign(modelName, h2o::h2o.deeplearning(model_id = modelName,
+                                              x = h2o.names(get(h_training_frame)),
+                                              training_frame = get(h_training_frame),
+                                              validation_frame = NULL,
+                                              activation = h_activation,
+                                              hidden = h_hidden,
+                                              adaptive_rate = h_adaptive_rate,
+                                              rho = h_rho,
+                                              epsilon = h_epsilon,
+                                              nesterov_accelerated_gradient = h_NAG,
+                                              input_dropout_ratio = h_input_dropout_rate,
+                                              hidden_dropout_ratios = h_hidden_dropout_rate,
+                                              initial_weight_distribution = h_initial_weight_dist,
+                                              shuffle_training_data = h_shuffle_train_data,
+                                              #
+                                              sparse = FALSE,
+                                              ignore_const_cols = FALSE,
+                                              score_each_iteration = TRUE,
+                                              standardize = FALSE,
+                                              epochs = 10000,
+                                              train_samples_per_iteration = -2,
+                                              target_ratio_comm_to_comp = -2,
+                                              loss = 'Quadratic',
+                                              distribution = 'AUTO',
+                                              score_interval = 5,
+                                              score_training_samples = 0,
+                                              score_validation_samples = 0,
+                                              score_duty_cycle = 0.1,
+                                              regression_stop = 1e-08,
+                                              stopping_rounds = 5,
+                                              stopping_metric = 'MSE',
+                                              stopping_tolerance = 1e-08,
+                                              max_runtime_secs = 60,
+                                              score_validation_sampling = 'Uniform',
+                                              diagnostics = TRUE,
+                                              fast_mode = TRUE,
+                                              force_load_balance = TRUE,
+                                              variable_importances = TRUE,
+                                              replicate_training_data = TRUE,
+                                              export_weights_and_biases = TRUE,
+                                              autoencoder = TRUE))
+      
+      
+      # Get Outlier Factor Scores for Each Observation ----
+      assign('OutlierFactorScore', h2o::h2o.anomaly(anomalyAutoencoder,
+                                                    get(h_training_frame)))
+      
+      OutlierFactorScore <- tibble::as.tibble(OutlierFactorScore)
+      
+      
+      OutlierFactorScore <- OutlierFactorScore %>%
+        dplyr::mutate(Observation = 1:nrow(OutlierFactorScore)) %>%
+        dplyr::mutate(OF_Score = Reconstruction.MSE) %>%
+        dplyr::select(-Reconstruction.MSE) %>%
+        dplyr::mutate(OF_Rank = rank(desc(OF_Score))) %>%
+        dplyr::arrange(OF_Rank)
+      
+      # Display table of outliers and histogram
+      output$TopOutliers <- renderTable(OutlierFactorScore)
+      output$OFSHist <- renderPlot(ggplot2::ggplot() + 
+                                     ggplot2::geom_histogram(aes(OutlierFactorScore$OF_Score), 
+                                                             bins = 50) + 
+                                     labs(x = 'Outlier Factor Score', y = 'Count (Number of Observations)',
+                                          title = 'Histogram of Outlier Factor Scores'))
     })
   }
   
