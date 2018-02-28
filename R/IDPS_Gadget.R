@@ -164,6 +164,9 @@ IDPS_Gadget <- function(...){
                                                     fluidPage(
                                                       fluidRow(
                                                         column(width = 12,
+                                                               numericInput('numOut', 
+                                                                            'Number of Outliers to Display',
+                                                                            30),
                                                                tableOutput('TopOutliers')
                                                         )
                                                       )
@@ -173,6 +176,7 @@ IDPS_Gadget <- function(...){
                                                     fluidPage(
                                                       fluidRow(
                                                         column(width = 12,
+                                                               numericInput('numBin', 'Number of Bins', 30),
                                                                plotOutput('OFSHist')
                                                         )
                                                       )
@@ -561,10 +565,11 @@ IDPS_Gadget <- function(...){
         dplyr::arrange(OF_Rank)
       
       # Display table of outliers and histogram
-      output$TopOutliers <- renderTable(OutlierFactorScore)
+      output$TopOutliers <- renderTable(OutlierFactorScore  %>%
+                                          dplyr::top_n(-input$numOut, OF_Rank))
       output$OFSHist <- renderPlot(ggplot2::ggplot() + 
                                      ggplot2::geom_histogram(aes(OutlierFactorScore$OF_Score), 
-                                                             bins = 50) + 
+                                                             bins = input$numBin) + 
                                      labs(x = 'Outlier Factor Score', y = 'Count (Number of Observations)',
                                           title = 'Histogram of Outlier Factor Scores'))
     })
