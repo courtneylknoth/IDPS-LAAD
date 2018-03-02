@@ -2,7 +2,7 @@
 % Please edit documentation in R/IDPS_Gadget.R
 \name{IDPS_Gadget}
 \alias{IDPS_Gadget}
-\title{Interactive anomaly detection using autoencoder neural network}
+\title{Interactive anomaly detection using autoencoder neural network gadget}
 \usage{
 IDPS_Gadget(...)
 }

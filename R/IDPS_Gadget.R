@@ -1,14 +1,14 @@
-#' @title Interactive anomaly detection using autoencoder neural network
+#' @title Interactive anomaly detection using autoencoder neural network gadget
 #' 
 #' @import shiny
+#' @import shinythemes
 #' @import tidyverse
 #' @import caret
 #' @import h2o
-#' @importFrom shinythemes shinytheme
 #' 
 #' @export
 
-IDPS_Gadget <- function(...){
+IDPS_Gadget <- function(...) {
   
   ui <- navbarPage(title = 'Anomaly Detection Autoencoder',
                    tabPanel('Intro and Instructions', 
@@ -25,6 +25,8 @@ IDPS_Gadget <- function(...){
                                                   )
                                                 )
                                        ),
+                                       tabPanel('Select Features',
+                                                textOutput('limFunct')),
                                        tabPanel('Train/Test Split Data',
                                                 fluidPage(
                                                   navlistPanel('Select Dataset to View',
@@ -54,6 +56,9 @@ IDPS_Gadget <- function(...){
                                                 fluidPage(
                                                   navlistPanel('Select Dataset to View',
                                                                id = 'DatasetSel',
+                                                               tabPanel('Full Data [0,1]',
+                                                                        tableOutput('FullZO')
+                                                               ),
                                                                tabPanel('Subset 1 Train [0,1]', 
                                                                         tableOutput('Scale1TrainZO')
                                                                ),
@@ -72,6 +77,9 @@ IDPS_Gadget <- function(...){
                                                                tabPanel('Subset 3 Test [0,1]',
                                                                         tableOutput('Scale3TestZO')
                                                                ),
+                                                               tabPanel('Full Data [-1,1]',
+                                                                        tableOutput('FullPM1')
+                                                               ),
                                                                tabPanel('Subset 1 Train [-1,1]', 
                                                                         tableOutput('Scale1TrainPM1')
                                                                ),
@@ -89,6 +97,9 @@ IDPS_Gadget <- function(...){
                                                                ),
                                                                tabPanel('Subset 3 Test [-1,1]',
                                                                         tableOutput('Scale3TestPM1')
+                                                               ),
+                                                               tabPanel('Full Data [-0.5,0.5]',
+                                                                        tableOutput('FullPM.5')
                                                                ),
                                                                tabPanel('Subset 1 Train [-0.5,0.5]', 
                                                                         tableOutput('Scale1TrainPM.5')
@@ -116,8 +127,11 @@ IDPS_Gadget <- function(...){
                    tabPanel('Hyperparameter DOE',
                             fluidPage(
                               tabsetPanel(
-                                tabPanel('Build Custom Designed Experiment',
+                                tabPanel('Load Custom Designed Experiment',
                                          textOutput('CustDOE')
+                                ),
+                                tabPanel('Build Custom Designed Experiment',
+                                         textOutput('CustDOE2')
                                 ),
                                 tabPanel('Default Experimental Design',
                                          fluidPage(
@@ -137,18 +151,23 @@ IDPS_Gadget <- function(...){
                             fluidPage(
                               fluidRow(
                                 column(width = 12,
-                                       selectInput('TestDesignSel',
-                                                   'Select Hyperparameter Test Design',
-                                                   list('Run Short Default Experimental Design',
-                                                        'Run Full Default Experimental Design'),
-                                                   selected = 'Run Short Default Experimental Design',
-                                                   multiple = FALSE),
-                                       textOutput('DOENote'),
-                                       titlePanel(''),
-                                       actionButton('ActionTestDesign', 
-                                                    label = 'Run Autoencoder Designed Experiment'),
-                                       textOutput('ResultsLocation'),
+                                       wellPanel(
+                                         selectInput('TestDesignSel',
+                                                     'Select Hyperparameter Test Design',
+                                                     list('Run Short Default Experimental Design',
+                                                          'Run Full Default Experimental Design'),
+                                                     selected = 'Run Short Default Experimental Design',
+                                                     multiple = FALSE),
+                                         textOutput('DOENote')
+                                       ),
+                                       wellPanel(
+                                         titlePanel('Run Experiment'),
+                                         actionButton('ActionTestDesign', 
+                                                      label = 'Run Autoencoder Designed Experiment'),
+                                         textOutput('ResultsLocation')
+                                       ),
                                        titlePanel('Selected Hyperparameter Test Design'),
+                                       textOutput('nameSelectedExperiment'),
                                        tableOutput('SelectedExperiment')
                                 )
                               )
@@ -180,7 +199,8 @@ IDPS_Gadget <- function(...){
                                                                plotOutput('OFSHist')
                                                         )
                                                       )
-                                                    ))
+                                                    )
+                                           )
                                            
                               )
                             )
@@ -208,6 +228,8 @@ IDPS_Gadget <- function(...){
       dplyr::mutate(Observation_Number = 1:nrow(iris))
     
     output$Table <- renderTable(irisWithObsNum)
+    
+    output$limFunct <- renderText('Functionality comming in future release')
     
     # Split into Test and Train Subsets ----
     output$Subset1 <- renderText('Limited Functionality, Using Fisher Iris Data')
@@ -253,6 +275,8 @@ IDPS_Gadget <- function(...){
     output$Test3 <- renderTable(irisTest3)
     
     # Data Scaling ----
+    irisDataFullZO <- customscale(irisDataFull, irisDataFull, 0, 1)
+    output$FullZO <- renderTable(irisDataFullZO)
     irisTrain1ZO <- customscale(irisTrain1, irisTrain1, 0, 1)
     output$Scale1TrainZO <- renderTable(irisTrain1ZO)
     irisTest1ZO <- customscale(irisTrain1, irisTest1, 0, 1)
@@ -265,6 +289,8 @@ IDPS_Gadget <- function(...){
     output$Scale3TrainZO <- renderTable(irisTrain3ZO)
     irisTest3ZO <- customscale(irisTrain3, irisTest3, 0, 1)
     output$Scale3TestZO <- renderTable(irisTest3ZO)
+    irisDataFullPM1 <- customscale(irisDataFull, irisDataFull, -1, 1)
+    output$FullPM1 <- renderTable(irisDataFullPM1)
     irisTrain1PM1 <- customscale(irisTrain1, irisTrain1, -1, 1)
     output$Scale1TrainPM1 <- renderTable(irisTrain1PM1)
     irisTest1PM1 <- customscale(irisTrain1, irisTest1, -1, 1)
@@ -277,6 +303,8 @@ IDPS_Gadget <- function(...){
     output$Scale3TrainPM1 <- renderTable(irisTrain3PM1)
     irisTest3PM1 <- customscale(irisTrain3, irisTest3, -1, 1)
     output$Scale3TestPM1 <- renderTable(irisTest3PM1)
+    irisDataFullPM.5 <- customscale(irisDataFull, irisDataFull, -0.5, 0.5)
+    output$FullPM.5 <- renderTable(irisDataFullPM.5)
     irisTrain1PM.5 <- customscale(irisTrain1, irisTrain1, -0.5, 0.5)
     output$Scale1TrainPM.5 <- renderTable(irisTrain1PM.5)
     irisTest1PM.5 <- customscale(irisTrain1, irisTest1, -0.5, 0.5)
@@ -290,8 +318,9 @@ IDPS_Gadget <- function(...){
     irisTest3PM.5 <- customscale(irisTrain3, irisTest3, -0.5, 0.5)
     output$Scale3TestPM.5 <- renderTable(irisTest3PM.5)
     
-    # Design of Expriments
+    # Design of Expriments ----
     output$CustDOE <- renderText('Functionality comming in future release')
+    output$CustDOE2 <- renderText('Functionality comming in future release')
     
     DefaultDOE <- readr::read_csv('./data/testDesignShiny.csv', 
                                   col_names = TRUE) %>%
@@ -305,14 +334,11 @@ IDPS_Gadget <- function(...){
                                  Neural Network hyperparameter.')
     
     output$ResultsLocation <- renderText('After button press, results will be dispayed on subsequent tabs. 
-                                         Running the experiment will take time, please view staus in the 
-                                         R Console window.')
+                                         Running the experiment will take time.')
     
+    #Select appropriate test design ---
     rv <- reactiveValues(testDesign = NULL)
     
-    
-    
-    #Select appropriate test design
     observe({
       rv$testDesign <- `if`(input$TestDesignSel == 'Run Short Default Experimental Design',
                             readr::read_csv('./data/testDesignShiny.csv', col_names = TRUE) %>%
@@ -320,258 +346,239 @@ IDPS_Gadget <- function(...){
                             readr::read_csv('./data/testDesignShiny.csv', col_names = TRUE)
       )
       output$SelectedExperiment <- renderTable(rv$testDesign)
+      output$nameSelectedExperiment <- renderText(paste0('Selected Test Design:  ',
+                                                         input$TestDesignSel))
     })
     
-    
+    # Execute test design ----
     observeEvent(input$ActionTestDesign, {
       
-      
-      # Load Autoencoder datasets ----
-      path <- './data/'
-      h2o::h2o.init()
-      
-      print('Loading all datasets to H2O')
-      
-      irisDataFullPM.5 <- h2o.importFile(path = paste0(path, 'irisDataFullPM.5','.csv'),
-                                         header = TRUE)
-      irisDataFullPM1 <- h2o.importFile(path = paste0(path, 'irisDataFullPM1','.csv'),
-                                        header = TRUE)
-      irisDataFullZO <- h2o.importFile(path = paste0(path, 'irisDataFullZO','.csv'),
-                                       header = TRUE)
-      irisTest1PM.5 <- h2o.importFile(path = paste0(path, 'irisTest1PM.5','.csv'),
-                                      header = TRUE)
-      irisTest1PM1 <- h2o.importFile(path = paste0(path, 'irisTest1PM1','.csv'),
-                                     header = TRUE)
-      irisTest1ZO <- h2o.importFile(path = paste0(path, 'irisTest1ZO','.csv'),
-                                    header = TRUE)
-      irisTest2PM.5 <- h2o.importFile(path = paste0(path, 'irisTest2PM.5','.csv'),
-                                      header = TRUE)
-      irisTest2PM1 <- h2o.importFile(path = paste0(path, 'irisTest2PM1','.csv'),
-                                     header = TRUE)
-      irisTest2ZO <- h2o.importFile(path = paste0(path, 'irisTest2ZO','.csv'),
-                                    header = TRUE)
-      irisTest3PM.5 <- h2o.importFile(path = paste0(path, 'irisTest3PM.5','.csv'),
-                                      header = TRUE)
-      irisTest3PM1 <- h2o.importFile(path = paste0(path, 'irisTest3PM1','.csv'),
-                                     header = TRUE)
-      irisTest3ZO <- h2o.importFile(path = paste0(path, 'irisTest3ZO','.csv'),
-                                    header = TRUE)
-      irisTrain1PM.5 <- h2o.importFile(path = paste0(path, 'irisTrain1PM.5','.csv'),
-                                       header = TRUE)
-      irisTrain1PM1 <- h2o.importFile(path = paste0(path, 'irisTrain1PM1','.csv'),
-                                      header = TRUE)
-      irisTrain1ZO <- h2o.importFile(path = paste0(path, 'irisTrain1ZO','.csv'),
-                                     header = TRUE)
-      irisTrain2PM.5 <- h2o.importFile(path = paste0(path, 'irisTrain2PM.5','.csv'),
-                                       header = TRUE)
-      irisTrain2PM1 <- h2o.importFile(path = paste0(path, 'irisTrain2PM1','.csv'),
-                                      header = TRUE)
-      irisTrain2ZO <- h2o.importFile(path = paste0(path, 'irisTrain2ZO','.csv'),
-                                     header = TRUE)
-      irisTrain3PM.5 <- h2o.importFile(path = paste0(path, 'irisTrain3PM.5','.csv'),
-                                       header = TRUE)
-      irisTrain3PM1 <- h2o.importFile(path = paste0(path, 'irisTrain3PM1','.csv'),
-                                      header = TRUE)
-      irisTrain3ZO <- h2o.importFile(path = paste0(path, 'irisTrain3ZO','.csv'),
-                                     header = TRUE)
-      
-      # Evaluate Test Designs ----
-      testDesignRes <- rv$testDesign %>%
-        dplyr::select(-Y) %>%
-        tibble::add_column(Dropout = TRUE, Run_Number = NA, Train_MSE = NA, Test_MSE = NA, Train_Time = NA,
-                           Notes = NA)
-      
-      n = nrow(testDesignRes)
-      
-      print('Running Autoencoder Hyperparameter Designed Experiment')
-      
-      for (i in 1:n){
-        
-        tryCatch({
-          h_x <- paste0(testDesignRes$Design_Point[i])
-          h_training_frame <- paste0('iris','Train', testDesignRes$Subset_Split[i],
-                                     testDesignRes$Data_Scale[i])
-          h_validation_frame <- paste0('iris','Test', testDesignRes$Subset_Split[i],
-                                       testDesignRes$Data_Scale[i])
-          ifelse(testDesignRes$Dropout[i]==TRUE, h_activation <- paste0(testDesignRes$Activation_Function[i], 'WithDropout'),
-                 h_activation <- testDesignRes$Activation_Function[i])
-          h_hidden <- testDesignRes$Number_Neurons[i]
-          h_adaptive_rate <- TRUE
-          h_rho <- testDesignRes$Rho[i]
-          h_epsilon <- testDesignRes$Epsilon[i]
-          h_NAG <- TRUE
-          h_input_dropout_rate <- ifelse(testDesignRes$Dropout[i]==TRUE, testDesignRes$Input_DO_Rate[i], NULL)
-          h_hidden_dropout_rate <- ifelse(testDesignRes$Dropout[i]==TRUE, testDesignRes$Hidden_DO_Rate[i], NULL)
-          h_initial_weight_dist <- testDesignRes$Initial_Weight_Dist[i]
-          h_shuffle_train_data <- testDesignRes$Shuffle_Train_Data[i]
-          
-          modelName <- paste0('DpT: ', testDesignRes$Design_Point[i], '_Subset: ',
-                              testDesignRes$Subset_Split[i])
-          
-          print(paste0('Experimental Design Point ', i, ' of ', n))
-          
-          assign(modelName,
-                 h2o.deeplearning(model_id = modelName,
-                                  x = h2o.names(get(h_training_frame)),
-                                  training_frame = get(h_training_frame),
-                                  validation_frame = get(h_validation_frame),
-                                  activation = h_activation,
-                                  hidden = h_hidden,
-                                  adaptive_rate = h_adaptive_rate,
-                                  rho = h_rho,
-                                  epsilon = h_epsilon,
-                                  nesterov_accelerated_gradient = h_NAG,
-                                  input_dropout_ratio = h_input_dropout_rate,
-                                  hidden_dropout_ratios = h_hidden_dropout_rate,
-                                  initial_weight_distribution = h_initial_weight_dist,
-                                  shuffle_training_data = h_shuffle_train_data,
-                                  #
-                                  sparse = FALSE,
-                                  ignore_const_cols = FALSE,
-                                  score_each_iteration = TRUE,
-                                  standardize = FALSE,
-                                  epochs = 1000,
-                                  train_samples_per_iteration = -2,
-                                  target_ratio_comm_to_comp = -2,
-                                  loss = 'Quadratic',
-                                  distribution = 'AUTO',
-                                  score_interval = 5,
-                                  score_training_samples = 0,
-                                  score_validation_samples = 0,
-                                  score_duty_cycle = 0.1,
-                                  regression_stop = 1e-08,
-                                  stopping_rounds = 5,
-                                  stopping_metric = 'MSE',
-                                  stopping_tolerance = 1e-08,
-                                  max_runtime_secs = 60,
-                                  score_validation_sampling = 'Uniform',
-                                  diagnostics = TRUE,
-                                  fast_mode = TRUE,
-                                  force_load_balance = TRUE,
-                                  variable_importances = TRUE,
-                                  replicate_training_data = TRUE,
-                                  export_weights_and_biases = TRUE,
-                                  quiet_mode = FALSE,
-                                  autoencoder = TRUE))
-          
-          testDesignRes$Train_MSE[i] <- h2o.mse(get(modelName), train = TRUE)
-          testDesignRes$Test_MSE[i] <- h2o.mse(get(modelName), valid = TRUE)
-          testDesignRes$Train_Time[i] <- get(modelName)@model$run_time/1000
-          testDesignRes$Run_Number[i] <- i
-        },
-        error = function(cond){
-          testDesignRes$Notes[i] <- 'Exponential Growth'
-          i = i+1
-        }
-        )
-      }
-      
-      output$ResultsTable <- renderTable(testDesignRes)
-      
-      
-      # Summarise Results By Design Point ----
-      by_Dpt <- testDesignRes %>%
-        group_by(Design_Point) %>%
-        summarise(AvgTestMSE = mean(Test_MSE),
-                  MaxTestMSE = max(Test_MSE),
-                  MinTestMSE= min(Test_MSE),
-                  StdevTestMSE = sd(Test_MSE),
-                  CountTestMSE = n()) %>%
-        mutate(AvgMSERank = rank(AvgTestMSE))
-      
-      # Identify best Hyperparameter Settings ----
-      Final <- testDesignRes %>%
-        filter(Design_Point==top_n(by_Dpt, 1, AvgTestMSE)$Design_Point) %>%
-        slice(1)
-      
-      # AnomalyDetection Autoencoder ----
-      # Get Hyperparameters
-      
-      print('Running Anomaly Detection Autoencoder with Optimum Hyperparameters')
-      
-      i=1
-      h_x <- paste0(Final$Design_Point[i])
-      h_training_frame <- paste0('irisDataFull', Final$Data_Scale[i])
-      ifelse(Final$Dropout[i]==TRUE, h_activation <- paste0(Final$Activation_Function[i], 'WithDropout'),
-             h_activation <- Final$Activation_Function[i])
-      h_hidden <- Final$Number_Neurons[i]
-      h_adaptive_rate <- TRUE
-      h_rho <- Final$Rho[i]
-      h_epsilon <- Final$Epsilon[i]
-      h_NAG <- TRUE
-      h_input_dropout_rate <- ifelse(Final$Dropout[i]==TRUE, Final$Input_DO_Rate[i], NULL)
-      h_hidden_dropout_rate <- ifelse(Final$Dropout[i]==TRUE, Final$Hidden_DO_Rate[i], NULL)
-      h_initial_weight_dist <- Final$Initial_Weight_Dist[i]
-      h_shuffle_train_data <- Final$Shuffle_Train_Data[i]
-      
-      # Run Best Hyperparameter Autoencoder
-      modelName <- 'anomalyAutoencoder'
-      
-      assign(modelName, h2o::h2o.deeplearning(model_id = modelName,
-                                              x = h2o.names(get(h_training_frame)),
-                                              training_frame = get(h_training_frame),
-                                              validation_frame = NULL,
-                                              activation = h_activation,
-                                              hidden = h_hidden,
-                                              adaptive_rate = h_adaptive_rate,
-                                              rho = h_rho,
-                                              epsilon = h_epsilon,
-                                              nesterov_accelerated_gradient = h_NAG,
-                                              input_dropout_ratio = h_input_dropout_rate,
-                                              hidden_dropout_ratios = h_hidden_dropout_rate,
-                                              initial_weight_distribution = h_initial_weight_dist,
-                                              shuffle_training_data = h_shuffle_train_data,
-                                              #
-                                              sparse = FALSE,
-                                              ignore_const_cols = FALSE,
-                                              score_each_iteration = TRUE,
-                                              standardize = FALSE,
-                                              epochs = 10000,
-                                              train_samples_per_iteration = -2,
-                                              target_ratio_comm_to_comp = -2,
-                                              loss = 'Quadratic',
-                                              distribution = 'AUTO',
-                                              score_interval = 5,
-                                              score_training_samples = 0,
-                                              score_validation_samples = 0,
-                                              score_duty_cycle = 0.1,
-                                              regression_stop = 1e-08,
-                                              stopping_rounds = 5,
-                                              stopping_metric = 'MSE',
-                                              stopping_tolerance = 1e-08,
-                                              max_runtime_secs = 60,
-                                              score_validation_sampling = 'Uniform',
-                                              diagnostics = TRUE,
-                                              fast_mode = TRUE,
-                                              force_load_balance = TRUE,
-                                              variable_importances = TRUE,
-                                              replicate_training_data = TRUE,
-                                              export_weights_and_biases = TRUE,
-                                              autoencoder = TRUE))
-      
-      
-      # Get Outlier Factor Scores for Each Observation ----
-      assign('OutlierFactorScore', h2o::h2o.anomaly(anomalyAutoencoder,
-                                                    get(h_training_frame)))
-      
-      OutlierFactorScore <- tibble::as.tibble(OutlierFactorScore)
-      
-      
-      OutlierFactorScore <- OutlierFactorScore %>%
-        dplyr::mutate(Observation = 1:nrow(OutlierFactorScore)) %>%
-        dplyr::mutate(OF_Score = Reconstruction.MSE) %>%
-        dplyr::select(-Reconstruction.MSE) %>%
-        dplyr::mutate(OF_Rank = rank(desc(OF_Score))) %>%
-        dplyr::arrange(OF_Rank)
-      
-      # Display table of outliers and histogram
-      output$TopOutliers <- renderTable(OutlierFactorScore  %>%
-                                          dplyr::top_n(-input$numOut, OF_Rank))
-      output$OFSHist <- renderPlot(ggplot2::ggplot() + 
-                                     ggplot2::geom_histogram(aes(OutlierFactorScore$OF_Score), 
-                                                             bins = input$numBin) + 
-                                     labs(x = 'Outlier Factor Score', y = 'Count (Number of Observations)',
-                                          title = 'Histogram of Outlier Factor Scores'))
+      withProgress(message = 'Running Experiment', 
+                   value = 0, min = 0, max = nrow(rv$testDesign), {
+                     
+                     # Start and load Autoencoder datasets to h2o----
+                     incProgress(amount = 0, message = 'Starting h2o Session')               
+                     h2o::h2o.init()
+                     h2o::h2o.no_progress()
+                     
+                     incProgress(amount = 0, message = 'Loading Datasets to h2o')
+                     irisDataFullPM.5 <- h2o::as.h2o(irisDataFullPM.5)
+                     irisDataFullPM1 <- h2o::as.h2o(irisDataFullPM1)
+                     irisDataFullZO <- h2o::as.h2o(irisDataFullZO)
+                     irisTest1PM.5 <- h2o::as.h2o(irisTest1PM.5)
+                     irisTest1PM1 <- h2o::as.h2o(irisTest1PM1)
+                     irisTest1ZO <- h2o::as.h2o(irisTest1ZO)
+                     irisTest2PM.5 <- h2o::as.h2o(irisTest2PM.5)
+                     irisTest2PM1 <- h2o::as.h2o(irisTest2PM1)
+                     irisTest2ZO <- h2o::as.h2o(irisTest2ZO)
+                     irisTest3PM.5 <- h2o::as.h2o(irisTest3PM.5)
+                     irisTest3PM1 <- h2o::as.h2o(irisTest3PM1)
+                     irisTest3ZO <- h2o::as.h2o(irisTest3ZO)
+                     irisTrain1PM.5 <- h2o::as.h2o(irisTrain1PM.5)
+                     irisTrain1PM1 <- h2o::as.h2o(irisTrain1PM1)
+                     irisTrain1ZO <- h2o::as.h2o(irisTrain1ZO)
+                     irisTrain2PM.5 <- h2o::as.h2o(irisTrain2PM.5)
+                     irisTrain2PM1 <- h2o::as.h2o(irisTrain2PM1)
+                     irisTrain2ZO <- h2o::as.h2o(irisTrain2ZO)
+                     irisTrain3PM.5 <- h2o::as.h2o(irisTrain3PM.5)
+                     irisTrain3PM1 <- h2o::as.h2o(irisTrain3PM1)
+                     irisTrain3ZO <- h2o::as.h2o(irisTrain3ZO)
+                     
+                     # Evaluate Test Designs ----
+                     testDesignRes <- rv$testDesign %>%
+                       dplyr::select(-Y) %>%
+                       tibble::add_column(Dropout = TRUE, Run_Number = NA, Train_MSE = NA, Test_MSE = NA, Train_Time = NA,
+                                          Notes = NA)
+                     
+                     k = nrow(testDesignRes)
+                     
+                     for (i in 1:k){
+                       
+                       incProgress(amount = 1, message = 'Running Autoencoder Designed Experiment: ', 
+                                   detail = paste('Experiment ', i, ' of ', k))
+                       
+                       tryCatch({
+                         h_x <- paste0(testDesignRes$Design_Point[i])
+                         h_training_frame <- paste0('iris','Train', testDesignRes$Subset_Split[i],
+                                                    testDesignRes$Data_Scale[i])
+                         h_validation_frame <- paste0('iris','Test', testDesignRes$Subset_Split[i],
+                                                      testDesignRes$Data_Scale[i])
+                         ifelse(testDesignRes$Dropout[i]==TRUE, h_activation <- paste0(testDesignRes$Activation_Function[i], 'WithDropout'),
+                                h_activation <- testDesignRes$Activation_Function[i])
+                         h_hidden <- testDesignRes$Number_Neurons[i]
+                         h_adaptive_rate <- TRUE
+                         h_rho <- testDesignRes$Rho[i]
+                         h_epsilon <- testDesignRes$Epsilon[i]
+                         h_NAG <- TRUE
+                         h_input_dropout_rate <- ifelse(testDesignRes$Dropout[i]==TRUE, testDesignRes$Input_DO_Rate[i], NULL)
+                         h_hidden_dropout_rate <- ifelse(testDesignRes$Dropout[i]==TRUE, testDesignRes$Hidden_DO_Rate[i], NULL)
+                         h_initial_weight_dist <- testDesignRes$Initial_Weight_Dist[i]
+                         h_shuffle_train_data <- testDesignRes$Shuffle_Train_Data[i]
+                         
+                         modelName <- paste0('DpT: ', testDesignRes$Design_Point[i], '_Subset: ',
+                                             testDesignRes$Subset_Split[i])
+                         
+                         assign(modelName,
+                                h2o::h2o.deeplearning(model_id = modelName,
+                                                      x = h2o.names(get(h_training_frame)),
+                                                      training_frame = get(h_training_frame),
+                                                      validation_frame = get(h_validation_frame),
+                                                      activation = h_activation,
+                                                      hidden = h_hidden,
+                                                      adaptive_rate = h_adaptive_rate,
+                                                      rho = h_rho,
+                                                      epsilon = h_epsilon,
+                                                      nesterov_accelerated_gradient = h_NAG,
+                                                      input_dropout_ratio = h_input_dropout_rate,
+                                                      hidden_dropout_ratios = h_hidden_dropout_rate,
+                                                      initial_weight_distribution = h_initial_weight_dist,
+                                                      shuffle_training_data = h_shuffle_train_data,
+                                                      #
+                                                      sparse = FALSE,
+                                                      ignore_const_cols = FALSE,
+                                                      score_each_iteration = TRUE,
+                                                      standardize = FALSE,
+                                                      epochs = 1000,
+                                                      train_samples_per_iteration = -2,
+                                                      target_ratio_comm_to_comp = -2,
+                                                      loss = 'Quadratic',
+                                                      distribution = 'AUTO',
+                                                      score_interval = 5,
+                                                      score_training_samples = 0,
+                                                      score_validation_samples = 0,
+                                                      score_duty_cycle = 0.1,
+                                                      regression_stop = 1e-08,
+                                                      stopping_rounds = 5,
+                                                      stopping_metric = 'MSE',
+                                                      stopping_tolerance = 1e-08,
+                                                      max_runtime_secs = 60,
+                                                      score_validation_sampling = 'Uniform',
+                                                      diagnostics = TRUE,
+                                                      fast_mode = TRUE,
+                                                      force_load_balance = TRUE,
+                                                      variable_importances = TRUE,
+                                                      replicate_training_data = TRUE,
+                                                      export_weights_and_biases = TRUE,
+                                                      quiet_mode = TRUE,
+                                                      autoencoder = TRUE))
+                         
+                         testDesignRes$Train_MSE[i] <- h2o::h2o.mse(get(modelName), train = TRUE)
+                         testDesignRes$Test_MSE[i] <- h2o::h2o.mse(get(modelName), valid = TRUE)
+                         testDesignRes$Train_Time[i] <- get(modelName)@model$run_time/1000
+                         testDesignRes$Run_Number[i] <- i
+                       },
+                       error = function(cond){
+                         testDesignRes$Notes[i] <- 'Exponential Growth'
+                         i = i+1
+                       }
+                       )
+                     }
+                     
+                     incProgress(amount = 0, message = 'Generating Results', detail = NULL)
+                     
+                     output$ResultsTable <- renderTable(testDesignRes)
+                     
+                     # Summarise Results By Design Point ----
+                     by_Dpt <- testDesignRes %>%
+                       dplyr::group_by(Design_Point) %>%
+                       dplyr::summarise(AvgTestMSE = mean(Test_MSE),
+                                        MaxTestMSE = max(Test_MSE),
+                                        MinTestMSE= min(Test_MSE),
+                                        StdevTestMSE = sd(Test_MSE),
+                                        CountTestMSE = n()) %>%
+                       dplyr::mutate(AvgMSERank = rank(AvgTestMSE))
+                     
+                     # Identify best Hyperparameter Settings ----
+                     Final <- testDesignRes %>%
+                       filter(Design_Point==top_n(by_Dpt, 1, AvgTestMSE)$Design_Point) %>%
+                       slice(1)
+                     
+                     # AnomalyDetection Autoencoder ----
+                     # Get Hyperparameters
+                     i=1
+                     h_x <- paste0(Final$Design_Point[i])
+                     h_training_frame <- paste0('irisDataFull', Final$Data_Scale[i])
+                     ifelse(Final$Dropout[i]==TRUE, h_activation <- paste0(Final$Activation_Function[i], 'WithDropout'),
+                            h_activation <- Final$Activation_Function[i])
+                     h_hidden <- Final$Number_Neurons[i]
+                     h_adaptive_rate <- TRUE
+                     h_rho <- Final$Rho[i]
+                     h_epsilon <- Final$Epsilon[i]
+                     h_NAG <- TRUE
+                     h_input_dropout_rate <- ifelse(Final$Dropout[i]==TRUE, Final$Input_DO_Rate[i], NULL)
+                     h_hidden_dropout_rate <- ifelse(Final$Dropout[i]==TRUE, Final$Hidden_DO_Rate[i], NULL)
+                     h_initial_weight_dist <- Final$Initial_Weight_Dist[i]
+                     h_shuffle_train_data <- Final$Shuffle_Train_Data[i]
+                     
+                     # Run Best Hyperparameter Autoencoder
+                     modelName <- 'anomalyAutoencoder'
+                     
+                     assign(modelName, h2o::h2o.deeplearning(model_id = modelName,
+                                                             x = h2o.names(get(h_training_frame)),
+                                                             training_frame = get(h_training_frame),
+                                                             validation_frame = NULL,
+                                                             activation = h_activation,
+                                                             hidden = h_hidden,
+                                                             adaptive_rate = h_adaptive_rate,
+                                                             rho = h_rho,
+                                                             epsilon = h_epsilon,
+                                                             nesterov_accelerated_gradient = h_NAG,
+                                                             input_dropout_ratio = h_input_dropout_rate,
+                                                             hidden_dropout_ratios = h_hidden_dropout_rate,
+                                                             initial_weight_distribution = h_initial_weight_dist,
+                                                             shuffle_training_data = h_shuffle_train_data,
+                                                             #
+                                                             sparse = FALSE,
+                                                             ignore_const_cols = FALSE,
+                                                             score_each_iteration = TRUE,
+                                                             standardize = FALSE,
+                                                             epochs = 10000,
+                                                             train_samples_per_iteration = -2,
+                                                             target_ratio_comm_to_comp = -2,
+                                                             loss = 'Quadratic',
+                                                             distribution = 'AUTO',
+                                                             score_interval = 5,
+                                                             score_training_samples = 0,
+                                                             score_validation_samples = 0,
+                                                             score_duty_cycle = 0.1,
+                                                             regression_stop = 1e-08,
+                                                             stopping_rounds = 5,
+                                                             stopping_metric = 'MSE',
+                                                             stopping_tolerance = 1e-08,
+                                                             max_runtime_secs = 60,
+                                                             score_validation_sampling = 'Uniform',
+                                                             diagnostics = TRUE,
+                                                             fast_mode = TRUE,
+                                                             force_load_balance = TRUE,
+                                                             variable_importances = TRUE,
+                                                             replicate_training_data = TRUE,
+                                                             export_weights_and_biases = TRUE,
+                                                             quiet_mode = TRUE,
+                                                             autoencoder = TRUE))
+                     
+                     
+                     # Get Outlier Factor Scores for Each Observation ----
+                     assign('OutlierFactorScore', h2o::h2o.anomaly(anomalyAutoencoder,
+                                                                   get(h_training_frame)))
+                     
+                     #OutlierFactorScore <- tibble::as.tibble(OutlierFactorScore)
+                     
+                     OutlierFactorScore <- tibble::as.tibble(OutlierFactorScore) %>%
+                       dplyr::mutate(Observation = 1:nrow(OutlierFactorScore)) %>%
+                       dplyr::mutate(OF_Score = Reconstruction.MSE) %>%
+                       dplyr::select(-Reconstruction.MSE) %>%
+                       dplyr::mutate(OF_Rank = rank(dplyr::desc(OF_Score))) %>%
+                       dplyr::arrange(OF_Rank)
+                     
+                     # Display table of outliers and histogram
+                     output$TopOutliers <- renderTable(OutlierFactorScore  %>%
+                                                         dplyr::top_n(-input$numOut, OF_Rank))
+                     output$OFSHist <- renderPlot(ggplot2::ggplot() +
+                                                    ggplot2::geom_histogram(ggplot2::aes(OutlierFactorScore$OF_Score),
+                                                                            bins = input$numBin) +
+                                                    ggplot2::labs(x = 'Outlier Factor Score', y = 'Count (Number of Observations)',
+                                                                  title = 'Histogram of Outlier Factor Scores'))
+                   })
     })
   }
   
