@@ -241,7 +241,7 @@ IDPS_Gadget <- function(...) {
     output$Subset1 <- renderText('Limited Functionality, Using Fisher Iris Data')
     set.seed = 12345
     testTrain1 <- irisDataFull %>%
-      dplyr::mutate(Cross = sample(c(1,2), 
+      dplyr::mutate(Cross = sample(c(1, 2), 
                                    size = nrow(irisDataFull), 
                                    replace = TRUE,
                                    prob = c(0.80, 0.20)))
@@ -255,7 +255,7 @@ IDPS_Gadget <- function(...) {
     output$Subset2 <- renderText('Limited Functionality, Using Fisher Iris Data')
     set.seed = 123434
     testTrain2 <- irisDataFull %>%
-      dplyr::mutate(Cross = sample(c(1,2), 
+      dplyr::mutate(Cross = sample(c(1, 2), 
                                    size = nrow(irisDataFull), 
                                    replace = TRUE,
                                    prob = c(0.80, 0.20)))
@@ -269,7 +269,7 @@ IDPS_Gadget <- function(...) {
     output$Subset3 <- renderText('Limited Functionality, Using Fisher Iris Data')
     set.seed = 134
     testTrain3 <- irisDataFull %>%
-      dplyr::mutate(Cross = sample(c(1,2), 
+      dplyr::mutate(Cross = sample(c(1, 2), 
                                    size = nrow(irisDataFull), 
                                    replace = TRUE,
                                    prob = c(0.80, 0.20)))
@@ -328,8 +328,7 @@ IDPS_Gadget <- function(...) {
     output$CustDOE <- renderText('Functionality comming in future release')
     output$CustDOE2 <- renderText('Functionality comming in future release')
     
-    DefaultDOE <- readr::read_csv('./data/testDesignShiny.csv', 
-                                  col_names = TRUE) %>%
+    DefaultDOE <- readRDS('./data/testDesignShiny') %>%
       select(-Y) %>%
       mutate('Mean_Square_Test_Error' = NA)
     output$DefaultDOE <- renderTable(DefaultDOE)
@@ -347,9 +346,9 @@ IDPS_Gadget <- function(...) {
     
     observe({
       rv$testDesign <- `if`(input$TestDesignSel == 'Run Short Default Experimental Design',
-                            readr::read_csv('./data/testDesignShiny.csv', col_names = TRUE) %>%
+                            readRDS(file = './data/testDesignShiny') %>%
                               dplyr::filter(Subset_Split == 1),
-                            readr::read_csv('./data/testDesignShiny.csv', col_names = TRUE)
+                            readRDS(file = './data/testDesignShiny')
       )
       output$SelectedExperiment <- renderTable(rv$testDesign)
       output$nameSelectedExperiment <- renderText(paste0('Selected Test Design:  ',
