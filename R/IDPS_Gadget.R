@@ -1,9 +1,9 @@
 #' @title Interactive anomaly detection using autoencoder neural network gadget
 #' 
+#' @import caret 
 #' @import shiny
 #' @import shinythemes
 #' @import tidyverse
-#' @import caret
 #' @import h2o
 #' 
 #' @export
@@ -15,8 +15,8 @@ IDPS_Gadget <- function(...) {
                             uiOutput('Intro', 
                                      inline = FALSE)
                    ),
-                   tabPanel('Data Preperation',
-                            navbarPage(title = 'Data Preperation',
+                   tabPanel('Data Preparation',
+                            navbarPage(title = 'Data Preparation',
                                        tabPanel('Load Data',
                                                 fluidPage(
                                                   flowLayout(
