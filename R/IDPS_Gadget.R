@@ -1,9 +1,12 @@
 #' @title Interactive anomaly detection using autoencoder neural network gadget
 #' 
-#' @import caret 
+#' 
+#' @return A shiny gadget (GUI) for autoencoder anomaly detection
+#' 
 #' @import shiny
 #' @import shinythemes
 #' @import tidyverse
+#' @import caret
 #' @import h2o
 #' 
 #' @export

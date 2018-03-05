@@ -6,3 +6,6 @@
 \usage{
 IDPS_Gadget(...)
 }
+\value{
+A shiny gadget (GUI) for autoencoder anomaly detection
+}
