@@ -2,6 +2,7 @@
 
 export(IDPS_Gadget)
 import(caret)
+import(dplyr)
 import(h2o)
 import(shiny)
 import(shinythemes)

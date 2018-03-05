@@ -6,12 +6,15 @@
 #' @import shiny
 #' @import shinythemes
 #' @import tidyverse
+#' @import dplyr
 #' @import caret
 #' @import h2o
 #' 
 #' @export
 
 IDPS_Gadget <- function(...) {
+  
+  `%>%` <- dplyr::`%>%`
   
   ui <- navbarPage(title = 'Anomaly Detection Autoencoder',
                    tabPanel('Intro and Instructions', 
@@ -587,3 +590,4 @@ IDPS_Gadget <- function(...) {
   
   runGadget(ui, server, viewer = browserViewer(browser = getOption('browser')))
 }
+
