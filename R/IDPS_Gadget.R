@@ -1,5 +1,6 @@
-#' @title Interactive anomaly detection using autoencoder neural network gadget
+#' Launch the shiny gadget
 #' 
+#' @title Interactive anomaly detection using autoencoder neural network gadget
 #' 
 #' @return A shiny gadget (GUI) for autoencoder anomaly detection
 #' 
@@ -7,12 +8,16 @@
 #' @import shinythemes
 #' @import tidyverse
 #' @import dplyr
+#' @import ggplot2
+#' @import knitr
+#' @import markdown
+#' @import tibble
 #' @import caret
 #' @import h2o
 #' 
 #' @export
 
-IDPS_Gadget <- function(...) {
+IDPS_Gadget <- function() {
   
   `%>%` <- dplyr::`%>%`
   
@@ -328,7 +333,9 @@ IDPS_Gadget <- function(...) {
     output$CustDOE <- renderText('Functionality comming in future release')
     output$CustDOE2 <- renderText('Functionality comming in future release')
     
-    DefaultDOE <- readRDS('./data/testDesignShiny') %>%
+    load(file = './data/testDesignShiny.rda')
+    
+    DefaultDOE <- testDesignShiny %>%
       select(-Y) %>%
       mutate('Mean_Square_Test_Error' = NA)
     output$DefaultDOE <- renderTable(DefaultDOE)
@@ -346,9 +353,9 @@ IDPS_Gadget <- function(...) {
     
     observe({
       rv$testDesign <- `if`(input$TestDesignSel == 'Run Short Default Experimental Design',
-                            readRDS(file = './data/testDesignShiny') %>%
+                            testDesignShiny %>%
                               dplyr::filter(Subset_Split == 1),
-                            readRDS(file = './data/testDesignShiny')
+                            testDesignShiny
       )
       output$SelectedExperiment <- renderTable(rv$testDesign)
       output$nameSelectedExperiment <- renderText(paste0('Selected Test Design:  ',

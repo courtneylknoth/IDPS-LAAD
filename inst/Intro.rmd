@@ -29,9 +29,9 @@ This shiny gadget is designed to construct an Autoencoder Neural Network (ANN) t
             + [-1, 1]    
 * Hyperparameter DOE
     + Load Custom Designed Experiment
-        + No capability to load datasets for analysis
+        + No capability to load external designed experiment for analysis
     + Build Custom Designed Experiment
-        + No capability to load datasets for analysis
+        + No capability to build experimental design withing gadget
     + Default Experimental Design
         + A 600-design point hyperparameter designed experiment is provided
 * Test Hyperparameters
@@ -52,6 +52,7 @@ This shiny gadget is designed to construct an Autoencoder Neural Network (ANN) t
     + Limited to base `r` `Fisher Iris` dataset use only
 2. Select the appropriate features from the loaded dataset
     + All 5 base `r` `Fisher Iris` dataset features are utilized
+    + The `Species` feature has been one-hot encoded to new 3-features 
 3. Split into training and test datasets
     + Base `r` `Fisher Iris` is automatically split into three subsets and subsequently split into _test_ and _training_ datasets
 4. Scale all subsets
@@ -60,6 +61,8 @@ This shiny gadget is designed to construct an Autoencoder Neural Network (ANN) t
     + Only the default experimental design is available for hyperparameter testing
 6. Test selected experimental design
     + Select either the short or full experimental design
+        + Short experimental design: 200 test trials
+        + Full experimental design: 600 test trials
 7. Click `Run Autoencoder Designed Experiment`
     + Long run times are to be expected
 8. Results of the designed experiment are displayed on the `DOE Results` tab

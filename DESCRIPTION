@@ -19,8 +19,12 @@ Imports: Rcpp (>= 0.12.12),
          shiny,
          shinythemes,
          tidyverse,
+         dplyr,
+         ggplot2,
+         knitr,
+         markdown,
+         tibble,
          h2o,
-         dplyr
 Depends: R (>= 2.10), caret
 SystemRequirements: Java (>= 1.7)
 LinkingTo: Rcpp

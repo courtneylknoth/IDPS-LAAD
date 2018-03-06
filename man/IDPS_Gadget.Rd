@@ -4,8 +4,11 @@
 \alias{IDPS_Gadget}
 \title{Interactive anomaly detection using autoencoder neural network gadget}
 \usage{
-IDPS_Gadget(...)
+IDPS_Gadget()
 }
 \value{
 A shiny gadget (GUI) for autoencoder anomaly detection
+}
+\description{
+Launch the shiny gadget
 }
