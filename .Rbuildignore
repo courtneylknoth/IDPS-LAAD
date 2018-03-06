@@ -2,3 +2,5 @@
 ^\.Rproj\.user$
 README.rmd
 ^\.travis\yml$
+appveyor\.yml$
+instructions.md
