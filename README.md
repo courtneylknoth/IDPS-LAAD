@@ -1,9 +1,9 @@
 Shiny Analytic Data Product
 ================
 Capt Spencer Butt
-05 February, 2018
+06 March, 2018
 
-[![Build Status](https://travis-ci.org/SpencerButt/IDPS-LAAD.svg?branch=master)](https://travis-ci.org/SpencerButt/IDPS-LAAD)
+[![Build Status](https://travis-ci.org/SpencerButt/IDPS-LAAD.svg?branch=master)](https://travis-ci.org/SpencerButt/IDPS-LAAD) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/SpencerButt/IDPS-LAAD?branch=master&svg=true)](https://ci.appveyor.com/project/SpencerButt/IDPS-LAAD)
 
 ### 1.1 Name
 
@@ -11,7 +11,7 @@ IDPS Log Autoencoder Anomaly Detector (IDPS-LAAD)
 
 ### 1.2: IDPS-LAAD Title
 
-This analytic data product is designed to construct an Autoencoder Neural Network (ANN) to detect anomalous data observations within Intrusion Detection Prevention System (IDPS) log file data. This analytic will test multiple ANN hyperparameters to determine the optimal settings supporting anomaly detection assuming that anomalous observations correspond to potentially adverse network traffic.
+This analytic data product is designed to construct an Autoencoder Neural Network (ANN) to detect anomalous data observations within Intrusion Detection Prevention System (IDPS) log file data. This analytic will test multiple ANN hyperparameters to determine the optimal settings supporting anomaly detection assuming that anomalous observations correspond to potentially adverse network traffic
 
 ### 1.3: IDPS Log Autoencoder Anomaly Detector Description
 
