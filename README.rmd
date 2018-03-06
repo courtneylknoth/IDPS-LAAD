@@ -11,7 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 [![Build Status](https://travis-ci.org/SpencerButt/IDPS-LAAD.svg?branch=master)](https://travis-ci.org/SpencerButt/IDPS-LAAD)
-
+[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/SpencerButt/IDPS-LAAD?branch=master&svg=true)](https://ci.appveyor.com/project/SpencerButt/IDPS-LAAD)
 
 ### 1.1 Name
 IDPS Log Autoencoder Anomaly Detector (IDPS-LAAD)
