@@ -1,7 +1,7 @@
 Shiny Analytic Data Product
 ================
 Capt Spencer Butt
-06 March, 2018
+07 March, 2018
 
 [![Build Status](https://travis-ci.org/SpencerButt/IDPS-LAAD.svg?branch=master)](https://travis-ci.org/SpencerButt/IDPS-LAAD) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/SpencerButt/IDPS-LAAD?branch=master&svg=true)](https://ci.appveyor.com/project/SpencerButt/IDPS-LAAD)
 
@@ -24,16 +24,16 @@ IDPS-LAAD is designed to read in a .csv containing the IDPS cyber log. The progr
 Section 2
 ---------
 
-<table style="width:100%;">
+<table>
 <colgroup>
 <col width="23%" />
 <col width="3%" />
-<col width="4%" />
-<col width="22%" />
+<col width="7%" />
+<col width="21%" />
 <col width="11%" />
 <col width="8%" />
 <col width="7%" />
-<col width="10%" />
+<col width="9%" />
 <col width="7%" />
 </colgroup>
 <thead>
@@ -185,7 +185,7 @@ Section 2
 <tr class="odd">
 <td align="left">Build Default or Import Custom Experimental Design</td>
 <td align="right">1</td>
-<td align="left">Not Started</td>
+<td align="left">Default Complete</td>
 <td align="left">GUI based method to select novice/expert modes of operation</td>
 <td align="left">.csv Designed Experiment or None</td>
 <td align="left">DOE data frame</td>
@@ -196,7 +196,7 @@ Section 2
 <tr class="even">
 <td align="left">Run Designed Experiment</td>
 <td align="right">2</td>
-<td align="left">Not Started</td>
+<td align="left">Complete</td>
 <td align="left">Identify best ANN hyperparameter settings</td>
 <td align="left">GUI Execute Button</td>
 <td align="left">Status Bar</td>
@@ -207,7 +207,7 @@ Section 2
 <tr class="odd">
 <td align="left">Present Designed Experiment Results</td>
 <td align="right">3</td>
-<td align="left">Not Started</td>
+<td align="left">Complete</td>
 <td align="left">Display Hyperparameter experimental design results</td>
 <td align="left">None</td>
 <td align="left">Test Design Results</td>
@@ -218,7 +218,7 @@ Section 2
 <tr class="even">
 <td align="left">Construct ANN using Best Hyperparameters Found In Designed Experiment</td>
 <td align="right">4</td>
-<td align="left">Not Started</td>
+<td align="left">Complete</td>
 <td align="left">ANN trained to detect anomalies</td>
 <td align="left">GUI Execute Button</td>
 <td align="left">Status Bar</td>
@@ -229,7 +229,7 @@ Section 2
 <tr class="odd">
 <td align="left">Use ANN to Detect Anomalies</td>
 <td align="right">5</td>
-<td align="left">Not Started</td>
+<td align="left">Complete</td>
 <td align="left">Anomaly Detection</td>
 <td align="left">GUI Execute Button</td>
 <td align="left">Histogram of Anomalies</td>
@@ -240,7 +240,7 @@ Section 2
 <tr class="even">
 <td align="left">Display Top 'n' Anomalies</td>
 <td align="right">6</td>
-<td align="left">Not Started</td>
+<td align="left">Complete</td>
 <td align="left">List of most likely anomales to evaluate for hostile cyber action</td>
 <td align="left">Number (n) anomalies to display</td>
 <td align="left">List/Table</td>
