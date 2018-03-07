@@ -1,4 +1,6 @@
-\name{IDP.-LAAD-package}
+\name{IDPS.LAAD-package}
+\alias{IDPS.LAAD}
+\alias{IDPS-LAAD}
 \docType{package}
 \title{
   Intrusion Detection Prevention System Log Autoencoder Anomaly Detector
