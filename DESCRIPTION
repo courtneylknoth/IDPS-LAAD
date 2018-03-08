@@ -27,6 +27,7 @@ Imports: Rcpp (>= 0.12.12),
          h2o,
 Depends: R (>= 2.10), caret
 SystemRequirements: Java (>= 1.7)
+LazyData: TRUE
 LinkingTo: Rcpp
 RoxygenNote: 6.0.1
 Suggests: testthat
