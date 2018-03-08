@@ -18,7 +18,17 @@
   as output a user defined top 'n' anomalous observations.
 }
 \details{
-  Currently this package has limited functionality as a shiny gadget. 
+  Currently this package has limited functionality as a shiny gadget. \cr \cr You 
+  \strong{ARE REQUIRED} to first load the library: \cr
+  \preformatted{library('IDPS.LAAD')
+  }
+  \strong{THEN}, launch the gadget \cr
+  \preformatted{IDPS_Gadget
+  }
+  Calling the following without first loading the library 
+  \strong{will return an error}:
+  \preformatted{IDPS.LAAD::IDPS_Gadget()
+  }
 }
 \author{
 Spencer Butt, <spencer.a.butt@gmail.com>.
@@ -39,7 +49,8 @@ Maintainer: Spencer Butt <spencer.a.butt@gmail.com>
 
 \examples{
   \dontrun{
-    # To launch the gadget, call the function:
+    # To launch the gadget, you must first load the library, then call the function:
+    library('IDPS.LAAD')
     IDPS_Gadget()
   }
 }

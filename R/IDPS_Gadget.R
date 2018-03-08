@@ -333,7 +333,7 @@ IDPS_Gadget <- function() {
     output$CustDOE <- renderText('Functionality comming in future release')
     output$CustDOE2 <- renderText('Functionality comming in future release')
     
-    data('testDesignShiny')
+    data('testDesignShiny', envir = environment())
     
     DefaultDOE <- testDesignShiny %>%
       select(-Y) %>%
