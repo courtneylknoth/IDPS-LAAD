@@ -1,0 +1,32 @@
+---
+title: "IDPS.LAAD Review"
+author: "1Lt Alexander Trigo"
+date: "March 12, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Accuracy
+
+Results are in line with what is described in the instructions and what is expected.   
+
+## Compilation
+
+Package was installed with no issues.  No issues were encountered with any package functions or with the shiny Gadget.  All functionality within RStudio and the shiny gadget work as described.  One minor grammar edit was noted in the readme file:
+
+* Readme currently reads: IDPS-LAAD is designed aid expeditious discovery, which should be: IDPS-LAAD is designed to aid...
+
+## Ease of Use
+
+The techniques leveraged to identify outliers in this package are fairly complex.  That is fine dependent based on the described use case, as functionality is reliable.  Due to limitations already identified within the package, user autonomy is restricted within the shiny gadget.  Using the example iris dataset provided as a default within the Shiny Gadget, I was able to run experiments, and generate outliers/histograms as described in the instructions.  The UI was easy to use and looks great.  I appreciated the progress bar generated as the experiments are run.  Several areas of ambiguity were as follows: Train/Test Split Data and Scale data under Data Preparation, and Build Custom Designed Experiment under the Hyperparameter DOE.  Having very limited knowledge in machine learning, I do not understand the importance of these sections, or what I would do if more autonomy were built into this gadget.  I make this point because the readme indicates that this is targeted at "cyber security experts with limited programming experience, and little-to-no statistical and/or machine learning expertise".  If users are supposed to understand some of the items in this application at a technical level, and utilize some of the features under construction, then more background and context is likely required.  
+
+## Grade
+
+I grade this as Excellent – very little rework required (45 pts)
+
+It seems to me that the areas that require work have already been identified.  This is not currently a final product, however, it is not advertised as such.  No technical issues were encountered with package functionality or with the shiny gadget, and everything worked well. As a layman, I was able to successfully run the default experiment and achieve outlier results.  If more autonomy was granted to me, I would not know what to do with it outside of selecting features and uploading data.  That being said, I have an idea of how much effort has been put into this and am very impressed.  Great Work! 
+
+
