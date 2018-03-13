@@ -1,0 +1,51 @@
+---
+title: "Review of IDPS-LAAD"
+author: "Rachel Ramirez"
+date: "March 12, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## **Accuracy**
+
+### Are the results accurate?
+I have no idea if the results are accurate, since its ANN and the results aren't in the documentation, but they are repeatable.    
+
+### Is it clear how the results were computed?
+It used an Artificial Neural Network with the option of 200 or 600 grid of hyperparameters.  I wasn't sure what the choices of three scaling intervals were doing. I wasn't sure why subsets of data be called hyperparameters.  It seems like there were a ton of hyperparameters, at least 8?  
+
+When I got to the DOE Results I didn't really understand what I was looking at.  For Identify Outliers, it wasn't really clear what I was looking at there either.  
+
+My results showed the top outlier was "Observation 14, 	OF_Score		0.85, OF_Rank	1.00" but I don't know what that means relative to the iris dataset.
+
+
+## **Compilation**
+
+### Did the analytic work? (i.e. install correctly, startup correctly)
+
+I used `devtools::install_github("SpencerButt/IDPS-LAAD", dependencies = TRUE, build_vignettes = TRUE)` and the analytic appeared to work fine until H20 was needed.  I already had H2o but H2o informed me that my package was too old,  3 months too old!  I had to delete it and reinstall it.  Then I got the same error,
+
+`Warning in h2o.clusterInfo() :
+  
+Your H2O cluster version is too old (3 months and 12 days)!
+Please download and install the latest version from http://h2o.ai/download/`
+
+However, the `Running Autoencoder Designed Experiment ` continued to run in the foreground of the widget, so I realized I could just ignore that warning.
+
+### Were errors encountered when executing code according to the documentation?
+ Yes, with H20.
+
+## **Ease of use**
+
+### Is it clear how to use the analytic? (i.e. is the documentation clear)
+ It was pretty straightforward to go through the widget and I liked that you added 'Feature coming soon' to places where it wasn't currently working.  
+
+### Are the visualizations/plots interpretable? 
+There are a lot of tables, and then when there is a plot with outliers it didn't immediately jump out to me why it was an outlier. I really liked the H20 loading progress bar through the experiments.  It seems like a graph of the resulting DOE MSE would be helpful unless its already incorporated in the outlier logic (is that the Outlier Factor Score?). 
+ 
+### Overall the analytic seems **Outstanding** based on the amount of functionality, soon ready to publish/deploy if not already based on his real intended dataset (47 pts)  I assume it  hard to present a 'toy example' with neural nets if they require a lot of data,  but if this is really going to be incorporated by someone with no knowledge of ANN it would help to put some sort of smaller-scaled example, like, maybe you could mention more about the iris fisher data and then how you sprinkled in some other species of flowers in there to see how fast and/or accurately it would be  classified as an outlier.    
+
+
