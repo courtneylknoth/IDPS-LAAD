@@ -4,3 +4,5 @@ README.rmd
 ^\.travis\yml$
 appveyor\.yml$
 instructions.md
+IDPS.LAAD_Trigo.Rmd
+review of IDPSLAAD.rmd
