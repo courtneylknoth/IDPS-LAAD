@@ -1,4 +1,6 @@
 ## it's courtney
+## Change 1
+
 #' Scale training and test datasets for anomaly detection 
 #' 
 #' @section Warning:
